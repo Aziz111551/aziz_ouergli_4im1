@@ -15,7 +15,7 @@ pipeline {
         stage('Code Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/Aziz111551/aziz_ouergli_4im1'
+                    url: 'https://github.com/Aziz111551/aziz_ouergli_4im1.git'
             }
         }
 
@@ -24,6 +24,16 @@ pipeline {
                 sh "mvn clean package -Dmaven.test.skip=true"
             }
         }
+
+        /* ---------------------- NOUVEAU : ANALYSE SONAR -------------------- */
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {   
+                    sh "mvn sonar:sonar"
+                }
+            }
+        }
+        /* ------------------------------------------------------------------ */
 
         stage('Build Docker Image') {
             steps {
